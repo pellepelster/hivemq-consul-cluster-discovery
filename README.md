@@ -73,7 +73,7 @@ The Consul discovery plugin uses its own configuration file 'consuldiscovery.pro
 
 ### ACL token Configuration
 
-The Consul token that will be used can be passed to the plugin by using the environment variable `CONSUL_TOKEN`.
+The Consul token that will be used can be passed to the plugin by using the environment variable `CONSUL_HTTP_TOKEN`.
 
 ### Development and Testing
 

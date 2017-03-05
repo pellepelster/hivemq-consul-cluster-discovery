@@ -5,9 +5,9 @@ Consul.
 
 ### How it works
 
-On startup each broker registers a Consul service with hostname and port. Then each broker regularly checks the list
-of registered services within Consul and tries to form a cluster. Additionaly each Consul service is equipped with a
-TTL health check which is updated by each broker so stale entries can be detected.
+On startup the plugin registers a Consul service with hostname and port of the HiveMQ broker. Then each broker regularly
+checks the list of registered services within Consul and tries to form a cluster. Additionaly each Consul service is
+equipped with a TTL health check which is updated by each broker so stale entries can be detected.
 
 ### Building
 
@@ -22,7 +22,37 @@ To build the jar execute:
 1. Copy the jar file from the build dir `buid/libs/hivemq-consul-cluster-discovery-<version>-SNAPSHOT-all.jar` to your `[HIVEMQ_HOME]/plugins` folder
 2. Copy the `examples/consuldiscovery.properties` file to your `[HIVEMQ_HOME]/conf` folder
 3. Modify the `consuldiscovery.properties.properties file for your needs
-4. Done
+4. Activate the plugin in HiveMQ configuration
+```
+<?xml version="1.0"?>
+<hivemq xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../hivemq-config.xsd">
+
+    <!-- ...... -->
+
+    <cluster>
+        <enabled>true</enabled>
+
+        <transport>
+            <udp>
+                <!-- disable multicast to avoid accidental cluster forming -->
+                <multicast-enabled>false</multicast-enabled>
+            </udp>
+        </transport>
+
+        <discovery>
+            <plugin>
+                <reload-interval>60</reload-interval>
+            </plugin>
+        </discovery>
+
+    </cluster>
+
+</hivemq>
+```
+
+5. Start the cluster and wait (up to `reload-interval` seconds for the worker nodes to discover each other
+6. Done!
 
 ### Usage
 

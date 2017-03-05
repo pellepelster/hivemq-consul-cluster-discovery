@@ -1,0 +1,56 @@
+plugins {
+    id 'java'
+    id 'idea'
+    id 'com.palantir.docker' version '0.12.0'
+    id 'com.palantir.docker-run' version '0.12.0'
+    id 'com.github.johnrengelman.shadow' version '1.2.3'
+}
+
+group 'io.pelle'
+version '1.0-SNAPSHOT'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+ext {
+    dropwizard_version = '1.0.6'
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testCompile group: 'com.github.tomakehurst', name: 'wiremock', version: '2.5.1'
+    compile group: 'com.hivemq', name: 'hivemq-spi', version: '3.1.0'
+    compile group: 'com.orbitz.consul', name: 'consul-client', version: '0.13.13'
+    compile group: 'org.mockito', name: 'mockito-core', version: '2.7.13'
+
+}
+
+shadowJar {
+    baseName = 'hivemq-consul-cluster-discovery'
+
+    dependencies {
+        exclude(dependency('com.hivemq:hivemq-spi:.*'))
+        exclude(dependency('com.google.inject::.*'))
+        exclude(dependency('com.google.guava::.*'))
+        exclude(dependency('ch.qos.logback::.*'))
+        exclude(dependency('javax.servlet::.*'))
+    }
+
+}
+
+docker {
+    name 'hivemq-consul-cluster-discovery'
+    dockerfile 'Dockerfile'
+    files tasks.shadowJar.outputs
+    files 'config'
+}
+
+
+dockerRun {
+    name 'hivemq-consul-cluster-discovery-test'
+    image 'hivemq-consul-cluster-discovery'
+    daemonize false
+}

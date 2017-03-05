@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<hivemq xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="../../hivemq-config.xsd">
+
+    <cluster>
+        <enabled>true</enabled>
+
+        <transport>
+            <udp>
+                <!-- disable multicast to avoid accidental cluster forming -->
+                <multicast-enabled>false</multicast-enabled>
+            </udp>
+        </transport>
+
+        <discovery>
+            <plugin>
+                <reload-interval>60</reload-interval>
+            </plugin>
+        </discovery>
+
+    </cluster>
+
+</hivemq>

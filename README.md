@@ -23,6 +23,7 @@ To build the jar execute:
 2. Copy the `examples/consuldiscovery.properties` file to your `[HIVEMQ_HOME]/conf` folder
 3. Modify the `consuldiscovery.properties.properties file for your needs
 4. Activate the plugin in HiveMQ configuration
+
 ```
 <?xml version="1.0"?>
 <hivemq xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
@@ -68,7 +69,7 @@ The Consul discovery plugin uses its own configuration file 'consuldiscovery.pro
 |------------|--------------|--------|
 | consul-hostname | consul hostname | consul |
 | consul-port | consul port | 8500 |
-| consul-ttl | Time to live for the services the plugin registers in Consul | 120 |
+| consul-ttl | Time to live for the health check that gets attached to the services the plugin registers in Consul | 120 |
 | consul-update-interval | The interval at which the plugin updates the TTL check for the Consul service. This value should obviously be smaller than `consul-ttl`  | 60 |
 
 ### ACL token Configuration

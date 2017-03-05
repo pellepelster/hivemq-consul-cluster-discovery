@@ -1,3 +1,7 @@
+/**
+ *
+ * Licensed under the MIT License. See LICENSE file in the project root for full license information.
+ */
 package io.pelle.hivemq.plugin;
 
 import com.hivemq.spi.HiveMQPluginModule;

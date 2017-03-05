@@ -30,7 +30,13 @@ public class ConsulClientProvider implements Provider<Consul> {
         log.info("connecting to consul {}:{}", consulHostname, consulPort);
 
         try {
-            return Consul.builder().withHostAndPort(HostAndPort.fromParts(consulHostname, consulPort)).build();
+            Consul.Builder builder = Consul.builder().withHostAndPort(HostAndPort.fromParts(consulHostname, consulPort));
+
+            if (System.getenv(Constants.CONSUL_TOKEN_ENVIRONMENT) != null) {
+                builder.withAclToken(Constants.CONSUL_TOKEN_ENVIRONMENT);
+            }
+
+            return builder.build();
         } catch (ConsulException e) {
             log.error("unable to connect to consul", e);
             throw new UnrecoverableException();

@@ -18,4 +18,5 @@ public interface Constants {
     String CONSUL_SERVICE_UPDATE_INTERVAL_KEY = "consul-update-interval";
     long CONSUL_SERVICE_UPDATE_INTERVAL_DEFAULT = 60;
 
+    String CONSUL_TOKEN_ENVIRONMENT = "CONSUL_TOKEN";
 }

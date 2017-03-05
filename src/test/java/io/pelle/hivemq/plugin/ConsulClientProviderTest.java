@@ -17,6 +17,6 @@ public class ConsulClientProviderTest {
         when(configuration.getConsulPort()).thenReturn(8500);
 
         new ConsulClientProvider(configuration).get();
-
     }
+
 }

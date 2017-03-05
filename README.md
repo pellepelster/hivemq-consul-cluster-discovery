@@ -34,11 +34,6 @@ To build the jar execute:
 
 The Consul discovery plugin uses its own configuration file 'consuldiscovery.properties' which must be placed in HiveMQ's config folder.
 
-==== General Configuration
-
-|===
-| Config name | Required | Description
-
 | config key | description | default |
 |------------|--------------|--------|
 | consul-hostname | consul hostname | consul |
@@ -46,7 +41,7 @@ The Consul discovery plugin uses its own configuration file 'consuldiscovery.pro
 | consul-ttl | Time to live for the services the plugin registers in Consul | 120 |
 | consul-update-interval | The interval at which the plugin updates the TTL check for the Consul service. This value should obviously be smaller than `consul-ttl`  | 60 |
 
-===== ACL token Configuration
+### ACL token Configuration
 
 The Consul token that will be used can be passed to the plugin by using the environment variable `CONSUL_TOKEN`.
 
@@ -132,3 +127,6 @@ HiveMQ by placing the following logback.xml in the HiveMQ conf folder:
 
 </configuration>
 ```
+#### Todo
+
+* sanity check for plugin configuration

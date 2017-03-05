@@ -6,7 +6,7 @@ Consul.
 ### How it works
 
 On startup each broker registers a Consul service with hostname and port. Then each broker regularly checks the list
-of registered services within Consul and will try to form a cluster. Additionaly each Consul service is equipped with a
+of registered services within Consul and tries to form a cluster. Additionaly each Consul service is equipped with a
 TTL health check which is updated by each broker so stale entries can be detected.
 
 ### Building
@@ -39,8 +39,12 @@ The Consul discovery plugin uses its own configuration file 'consuldiscovery.pro
 |===
 | Config name | Required | Description
 
-| s3-bucket-region | x | The region in which this bucket resides. See http://docs.aws.amazon.com/general/latest/gr/rande.html#s3_region for a list of regions
-|===
+| config key | description | default |
+|------------|--------------|--------|
+| consul-hostname | consul hostname | consul |
+| consul-port | consul port | 8500 |
+| consul-ttl | Time to live for the services the plugin registers in Consul | 120 |
+| consul-update-interval | The interval at which the plugin updates the TTL check for the Consul service. This value should obviously be smaller than `consul-ttl`  | 60 |
 
 ===== ACL token Configuration
 

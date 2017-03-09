@@ -14,7 +14,7 @@ equipped with a TTL health check which is updated by each broker so stale entrie
 To build the jar execute:
 
 ```sh
-./gradle shadowJar
+./gradlew shadowJar
 ```
 
 ### Installation

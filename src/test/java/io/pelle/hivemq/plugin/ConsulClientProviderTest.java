@@ -11,7 +11,6 @@ import static org.mockito.Mockito.when;
 public class ConsulClientProviderTest {
 
     @Test(expected = UnrecoverableException.class)
-    @Ignore
     public void shutdownHiveMQIfConsulNotAvailable() {
 
         Configuration configuration = mock(Configuration.class);

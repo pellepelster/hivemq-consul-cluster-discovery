@@ -7,7 +7,7 @@ plugins {
 }
 
 group 'io.pelle'
-version 'SNAPSHOT'
+version System.getenv("TRAVIS_TAG") ?: "SNAPSHOT"
 
 sourceCompatibility = 1.8
 

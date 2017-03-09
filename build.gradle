@@ -7,12 +7,7 @@ plugins {
 }
 
 group 'io.pelle'
-
-if (System.getenv()["TRAVIS_TAG"] != null && System.getenv()["TRAVIS_TAG"].length() > 0) {
-    version System.getenv()["TRAVIS_TAG"]
-} else {
-    version 'SNAPSHOT'
-}
+version ''
 
 sourceCompatibility = 1.8
 

@@ -7,16 +7,16 @@ plugins {
 }
 
 group 'io.pelle'
-version ''
+version 'SNAPSHOT'
+
+println 'xxx'
+println System.getenv("TRAVIS_TAG") ?: "SNAPSHOT"
+println 'xxx'
 
 sourceCompatibility = 1.8
 
 repositories {
     mavenCentral()
-}
-
-ext {
-    dropwizard_version = '1.0.6'
 }
 
 dependencies {

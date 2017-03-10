@@ -23,6 +23,22 @@ dependencies {
     compile group: 'com.orbitz.consul', name: 'consul-client', version: '0.13.13'
 }
 
+task generatePluginInfo {
+
+    def pluginInfoContent = '''\
+package io.pelle.hivemq.plugin;
+
+public interface PluginInfo {
+    String VERSION_NUMBER = "SNAPSHOT";
+}
+'''
+
+    def pluginInfoFile = new File("src/main/java/io/pelle/hivemq/plugin/PluginInfo.java")
+    pluginInfoFile.write(pluginInfoContent.replaceAll("SNAPSHOT", version))
+}
+
+assemble.dependsOn(generatePluginInfo)
+
 shadowJar {
     baseName = 'hivemq-consul-cluster-discovery'
 
@@ -42,7 +58,6 @@ docker {
     files tasks.shadowJar.outputs
     files 'config'
 }
-
 
 dockerRun {
     name 'hivemq-consul-cluster-discovery-test'

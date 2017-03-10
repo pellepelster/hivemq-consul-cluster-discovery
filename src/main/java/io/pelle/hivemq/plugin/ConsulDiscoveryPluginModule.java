@@ -9,7 +9,7 @@ import com.hivemq.spi.PluginEntryPoint;
 import com.hivemq.spi.plugin.meta.Information;
 import com.orbitz.consul.Consul;
 
-@Information(name = "Consul Cluster Discovery Plugin", author = "Christian Pelster", version = "SNAPSHOT")
+@Information(name = "Consul Cluster Discovery Plugin", author = "Christian Pelster", version = PluginInfo.VERSION_NUMBER)
 public class ConsulDiscoveryPluginModule extends HiveMQPluginModule {
 
     @Override

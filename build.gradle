@@ -11,6 +11,7 @@ version 'SNAPSHOT'
 
 println 'xxx'
 println System.getenv("TRAVIS_TAG") ?: "SNAPSHOT"
+println System.getenv("TRAVIS_TAG")
 println 'xxx'
 
 sourceCompatibility = 1.8

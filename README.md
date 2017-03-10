@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.org/pellepelster/hivemq-consul-cluster-discovery.svg?branch=master)](https://travis-ci.org/pellepelster/hivemq-consul-cluster-discovery)
+
 ## HiveMQ Consul Cluster Discovery Plugin
 
 This plugin allows your HiveMQ cluster nodes to discover each other dynamically by exchanging their information via

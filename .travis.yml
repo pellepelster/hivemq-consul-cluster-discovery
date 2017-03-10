@@ -13,7 +13,7 @@ deploy:
   provider: releases
   api_key:
     secure: YsEJekTOkhwpBMrCpEw3KX8jreCO1+3rkFnl5MGrnQlV315GGA7luZzMT2mJDCRx3edBPLwYDaU9zqJq4CowlMBmPzKi63GL62vCoTZ8wtflHWr7D7Qwi3L44qY1dLa+Aw7/Lh9hEeDCeFg5e31s9lta9r8z97KD0Y9pYRsmeXVEsS8eEMVnlXyUelkmPndBy5McjKZ3pdPA43I2y/0Lb60opTzFek70nV+qOlD/ZiqZJQElFIjJgko4uY+mvTlr4z1YpEUFoFgv3YEMBURSvyFbD8KIRB7WpXTHko9Sjytxpv6Jvxfxpke9oPOPmOPZ0BuzVfjjhGCmcw991HLAS+rb/3lSt+r6S0JCPeLbRyItr1djnwwio6XgxihLMPOs76R4RsesPdkRy/mrYA1K+xUc6iP1EBHxZe7MLa6bW5Qru0bn1ixgFcWcjBAR588fJqhAItrtNaT2I4Pj0j3Kgm3dwhwT3c8bHla642vtaKhlPmSZxetQ9Av0MdUUVk4PDcbZh6R7vvSVScKoAV4WkGlKM85+kY4KqUYaLYMpJuG/VaE9APOCvNrTu9CAuVdGN8vdQ3o0Re03KF+c/Ak0v22sjqyl5H1YBuJaIlEcbQM9RWGFgdpoAw6UvWkya7wQNAFy6lzDn+rg1d/tsGBqSk4jKS7ejDFLoTyTtzvPhzA=
-  file: build/libs/hivemq-consul-cluster-discovery-all.jar
+  file: build/libs/hivemq-consul-cluster-discovery-$TRAVIS_TAG-all.jar
   skip_cleanup: true
   on:
     repo: pellepelster/hivemq-consul-cluster-discovery

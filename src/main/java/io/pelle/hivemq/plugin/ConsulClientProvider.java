@@ -31,13 +31,15 @@ public class ConsulClientProvider implements Provider<Consul> {
 
         String consulHostname = configuration.getConsulHostname();
         int consulPort = configuration.getConsulPort();
-        log.info("connecting to consul {}:{}", consulHostname, consulPort);
 
         try {
             Consul.Builder builder = Consul.builder().withHostAndPort(HostAndPort.fromParts(consulHostname, consulPort));
 
             if (System.getenv(Constants.CONSUL_TOKEN_ENVIRONMENT) != null) {
                 builder.withAclToken(Constants.CONSUL_TOKEN_ENVIRONMENT);
+                log.info("connecting to consul {}:{} using http token", consulHostname, consulPort);
+            } else {
+                log.info("connecting to consul {}:{}", consulHostname, consulPort);
             }
 
             return builder.build();

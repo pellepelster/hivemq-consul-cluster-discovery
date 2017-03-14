@@ -56,7 +56,7 @@ public class ConsulDiscoveryCallbackTest {
         assertEquals("cluster-discovery-hivemq", registration.getName());
         assertEquals("clusternode1-hostname", registration.getAddress().get());
         assertEquals(Integer.valueOf(1234), registration.getPort().get());
-        assertEquals("cluster-discovery-hivemq", registration.getId());
+        assertEquals("cluster-discovery-hivemq-clusternode1", registration.getId());
         assertEquals(1, registration.getChecks().size());
 
         Registration.RegCheck regCheck = registration.getChecks().get(0);
@@ -69,7 +69,7 @@ public class ConsulDiscoveryCallbackTest {
         // run updater job and check consul service pass call
         runnableArgument.getValue().run();
         try {
-            verify(agentClient).pass(eq("cluster-discovery-hivemq"));
+            verify(agentClient).pass(eq("cluster-discovery-hivemq-clusternode1"));
         } catch (NotRegisteredException e) {
             throw new RuntimeException(e);
         }
@@ -97,7 +97,7 @@ public class ConsulDiscoveryCallbackTest {
         assertEquals(5678, addresses.get(0).getPort());
 
         callback.destroy();
-        verify(agentClient).deregister(eq("clusternode1"));
+        verify(agentClient).deregister(eq("cluster-discovery-hivemq-clusternode1"));
     }
 
 }

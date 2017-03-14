@@ -1,5 +1,4 @@
 /**
- *
  * Licensed under the MIT License. See LICENSE file in the project root for full license information.
  */
 package io.pelle.hivemq.plugin.configuration;
@@ -28,6 +27,10 @@ public class Configuration {
 
     public String getConsulServiceName() {
         return properties.getProperty(Constants.CONSUL_SERVICE_NAME_KEY, Constants.CONSUL_SERVICE_NAME_DEFAULT);
+    }
+
+    public boolean useConsulClusterIdAsNodeName() {
+        return Boolean.parseBoolean(properties.getProperty(Constants.CONSUL_SERVICE_ID_FROM_NODENAME_KEY, Boolean.toString(Constants.CONSUL_SERVICE_ID_FROM_NODENAME_DEFAULT)));
     }
 
     public long getConsulCheckTTL() {

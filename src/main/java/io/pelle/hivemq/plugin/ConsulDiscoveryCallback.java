@@ -1,5 +1,4 @@
 /**
- *
  * Licensed under the MIT License. See LICENSE file in the project root for full license information.
  */
 package io.pelle.hivemq.plugin;
@@ -43,6 +42,10 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
         this.pluginExecutorService = pluginExecutorService;
     }
 
+    private String getServiceId() {
+        return String.format("%s-%s", configuration.getConsulServiceName(), this.clusterId);
+    }
+
     @Override
     public void init(final String clusterId, final ClusterNodeAddress ownAddress) {
 
@@ -54,7 +57,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
                 .name(configuration.getConsulServiceName())
                 .port(ownAddress.getPort())
                 .address(ownAddress.getHost())
-                .id(configuration.getConsulServiceName())
+                .id(getServiceId())
                 .addChecks(ttlCheck).build();
         consul.agentClient().register(serviceRegistration);
 
@@ -62,7 +65,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
             @Override
             public void run() {
                 try {
-                    consul.agentClient().pass(configuration.getConsulServiceName());
+                    consul.agentClient().pass(getServiceId());
                 } catch (NotRegisteredException e) {
                     log.error("error updating check", e);
                 }
@@ -88,7 +91,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
 
     @Override
     public void destroy() {
-        consul.agentClient().deregister(clusterId);
+        consul.agentClient().deregister(getServiceId());
     }
 
 }

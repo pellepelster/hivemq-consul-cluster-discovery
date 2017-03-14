@@ -50,7 +50,7 @@ public class ConsulDiscoveryCallbackTest {
 
         // verify service registration
         ArgumentCaptor<Registration> argument = ArgumentCaptor.forClass(Registration.class);
-        verify(agentClient).register(argument.capture());
+        verify(agentClient).register(argument.capture(), any());
 
         Registration registration = argument.getValue();
         assertEquals("cluster-discovery-hivemq", registration.getName());

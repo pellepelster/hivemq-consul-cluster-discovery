@@ -1,0 +1,37 @@
+version: "2"
+services:
+  consul-server:
+    image: "consul"
+    command: agent -dev -client=0.0.0.0 -bind=0.0.0.0
+    ports:
+      - "8500:8500"
+
+  consul-agent1:
+    image: "consul"
+    command: agent -client=0.0.0.0 -join consul-server -data-dir=/tmp
+    links:
+      - consul-server
+
+  consul-agent2:
+    image: "consul"
+    command: agent -client=0.0.0.0 -join consul-server -data-dir=/tmp
+    links:
+      - consul-server
+
+  hivemq_node1:
+    image: hivemq-consul-cluster-discovery
+    environment:
+      - CONSUL_HTTP_TOKEN=token
+    links:
+      - consul-agent1:consul
+    ports:
+      - "1883"
+
+  hivemq_node2:
+    image: hivemq-consul-cluster-discovery
+    environment:
+      - CONSUL_HTTP_TOKEN=token
+    links:
+      - consul-agent2:consul
+    ports:
+      - "1883"

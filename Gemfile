@@ -1,0 +1,11 @@
+source 'https://rubygems.org'
+
+gem 'docker-api'
+gem 'docker-compose'
+gem 'diplomat'
+gem 'rake'
+gem 'mqtt'
+gem 'rspec-wait'
+gem 'rubocop'
+gem 'serverspec'
+gem 'vault'

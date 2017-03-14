@@ -54,7 +54,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
                 .name(configuration.getConsulServiceName())
                 .port(ownAddress.getPort())
                 .address(ownAddress.getHost())
-                .id(clusterId)
+                .id(configuration.getConsulServiceName())
                 .addChecks(ttlCheck).build();
         consul.agentClient().register(serviceRegistration);
 

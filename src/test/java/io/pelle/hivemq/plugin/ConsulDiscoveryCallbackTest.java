@@ -56,7 +56,7 @@ public class ConsulDiscoveryCallbackTest {
         assertEquals("cluster-discovery-hivemq", registration.getName());
         assertEquals("clusternode1-hostname", registration.getAddress().get());
         assertEquals(Integer.valueOf(1234), registration.getPort().get());
-        assertEquals("clusternode1", registration.getId());
+        assertEquals("cluster-discovery-hivemq", registration.getId());
         assertEquals(1, registration.getChecks().size());
 
         Registration.RegCheck regCheck = registration.getChecks().get(0);

@@ -29,10 +29,6 @@ public class Configuration {
         return properties.getProperty(Constants.CONSUL_SERVICE_NAME_KEY, Constants.CONSUL_SERVICE_NAME_DEFAULT);
     }
 
-    public boolean useConsulClusterIdAsNodeName() {
-        return Boolean.parseBoolean(properties.getProperty(Constants.CONSUL_SERVICE_ID_FROM_NODENAME_KEY, Boolean.toString(Constants.CONSUL_SERVICE_ID_FROM_NODENAME_DEFAULT)));
-    }
-
     public long getConsulCheckTTL() {
         return getLong(Constants.CONSUL_SERVICE_CHECK_TTL_KEY, Constants.CONSUL_SERVICE_CHECK_TTL_DEFAULT);
     }

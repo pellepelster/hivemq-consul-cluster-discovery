@@ -16,10 +16,6 @@ public interface Constants {
 
     String CONSUL_SERVICE_NAME_DEFAULT = "cluster-discovery-hivemq";
 
-    String CONSUL_SERVICE_ID_FROM_NODENAME_KEY = "consul-service-id-from-nodename";
-
-    boolean CONSUL_SERVICE_ID_FROM_NODENAME_DEFAULT = false;
-
     String CONSUL_SERVICE_CHECK_TTL_KEY = "consul-check-ttl";
     long CONSUL_SERVICE_CHECK_TTL_DEFAULT = 120;
 

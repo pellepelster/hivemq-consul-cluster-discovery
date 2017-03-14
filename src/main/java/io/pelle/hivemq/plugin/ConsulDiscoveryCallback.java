@@ -43,7 +43,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
     }
 
     private String getServiceId() {
-        return String.format("%s-%s", configuration.getConsulServiceName(), this.clusterId);
+        return String.format("%s", configuration.getConsulServiceName());
     }
 
     @Override

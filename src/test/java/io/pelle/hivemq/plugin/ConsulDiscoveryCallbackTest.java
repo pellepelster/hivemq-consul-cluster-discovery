@@ -69,7 +69,7 @@ public class ConsulDiscoveryCallbackTest {
         // run updater job and check consul service pass call
         runnableArgument.getValue().run();
         try {
-            verify(agentClient).pass(eq("clusternode1"));
+            verify(agentClient).pass(eq("cluster-discovery-hivemq"));
         } catch (NotRegisteredException e) {
             throw new RuntimeException(e);
         }

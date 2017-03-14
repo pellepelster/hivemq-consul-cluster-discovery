@@ -62,7 +62,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
             @Override
             public void run() {
                 try {
-                    consul.agentClient().pass(clusterId);
+                    consul.agentClient().pass(configuration.getConsulServiceName());
                 } catch (NotRegisteredException e) {
                     log.error("error updating check", e);
                 }

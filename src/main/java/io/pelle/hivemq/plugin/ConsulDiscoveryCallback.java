@@ -3,6 +3,7 @@
  */
 package io.pelle.hivemq.plugin;
 
+import com.google.common.base.Optional;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.hivemq.spi.callback.cluster.ClusterDiscoveryCallback;
@@ -15,6 +16,7 @@ import com.orbitz.consul.model.agent.Registration;
 import com.orbitz.consul.model.health.ServiceHealth;
 import com.orbitz.consul.option.ImmutableQueryOptions;
 import io.pelle.hivemq.plugin.configuration.Configuration;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -33,6 +35,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
 
     private String clusterId;
     private ClusterNodeAddress ownAddress;
+    private Optional<String> nodeAddress;
 
     @Inject
     public ConsulDiscoveryCallback(final Consul consul,
@@ -56,8 +59,8 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
         Registration.RegCheck ttlCheck = Registration.RegCheck.ttl(configuration.getConsulCheckTTL());
         Registration serviceRegistration = ImmutableRegistration.builder()
                 .name(configuration.getConsulServiceName())
+                .address(getNodeAddress())
                 .port(ownAddress.getPort())
-                .address(ownAddress.getHost())
                 .id(getServiceId())
                 .addChecks(ttlCheck).build();
         consul.agentClient().register(serviceRegistration, getQueryOptions());
@@ -107,4 +110,11 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
         consul.agentClient().deregister(getServiceId());
     }
 
+    public String getNodeAddress() {
+        if (StringUtils.isNoneEmpty(configuration.getNodeAddress())) {
+            return configuration.getNodeAddress();
+        } else {
+            return ownAddress.getHost();
+        }
+    }
 }

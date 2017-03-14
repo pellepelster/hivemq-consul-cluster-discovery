@@ -29,6 +29,10 @@ public class Configuration {
         return getPropertyWithOverride(Constants.CONSUL_SERVICE_NAME_KEY, Constants.CONSUL_SERVICE_NAME_DEFAULT);
     }
 
+    public String getNodeAddress() {
+        return getPropertyWithOverride(Constants.HIVEMQ_NODE_ADDRESS_KEY, Constants.HIVEMQ_NODE_ADDRESS_DEFAULT);
+    }
+
     public long getConsulCheckTTL() {
         return getLong(Constants.CONSUL_SERVICE_CHECK_TTL_KEY, Constants.CONSUL_SERVICE_CHECK_TTL_DEFAULT);
     }

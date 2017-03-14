@@ -51,7 +51,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
 
         Registration.RegCheck ttlCheck = Registration.RegCheck.ttl(configuration.getConsulCheckTTL());
         Registration serviceRegistration = ImmutableRegistration.builder()
-                .name(Constants.CONSUL_SERVICE_NAME)
+                .name(configuration.getConsulServiceName())
                 .port(ownAddress.getPort())
                 .address(ownAddress.getHost())
                 .id(clusterId)
@@ -76,7 +76,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
         final List<ClusterNodeAddress> addresses = new ArrayList<>();
 
         List<ServiceHealth> nodes = consul.healthClient()
-                .getHealthyServiceInstances(Constants.CONSUL_SERVICE_NAME)
+                .getHealthyServiceInstances(configuration.getConsulServiceName())
                 .getResponse();
 
         for (ServiceHealth node : nodes) {

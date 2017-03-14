@@ -4,3 +4,5 @@ hivemq-consul-cluster-discovery.iml
 hivemq-consul-cluster-discovery.ipr
 hivemq-consul-cluster-discovery.iws
 out/
+.bundle
+vendor

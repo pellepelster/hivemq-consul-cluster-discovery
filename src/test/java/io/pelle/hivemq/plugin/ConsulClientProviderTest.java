@@ -14,8 +14,7 @@ public class ConsulClientProviderTest {
     public void shutdownHiveMQIfConsulNotAvailable() {
 
         Configuration configuration = mock(Configuration.class);
-        when(configuration.getConsulHostname()).thenReturn("localhost");
-        when(configuration.getConsulPort()).thenReturn(8500);
+        when(configuration.getConsulUrl()).thenReturn("https://localhost:443");
 
         new ConsulClientProvider(configuration).get();
     }

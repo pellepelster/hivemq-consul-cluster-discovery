@@ -1,5 +1,6 @@
 package io.pelle.hivemq.plugin;
 
+import com.google.common.net.HostAndPort;
 import com.hivemq.spi.callback.cluster.ClusterNodeAddress;
 import com.hivemq.spi.services.PluginExecutorService;
 import com.orbitz.consul.AgentClient;
@@ -11,10 +12,13 @@ import com.orbitz.consul.model.agent.Registration;
 import com.orbitz.consul.model.health.*;
 import io.pelle.hivemq.plugin.configuration.Configuration;
 import io.pelle.hivemq.plugin.configuration.ConfigurationReader;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 
+import javax.net.ssl.SSLContext;
 import java.math.BigInteger;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
@@ -27,7 +31,7 @@ import static org.mockito.Mockito.*;
 public class ConsulDiscoveryCallbackTest {
 
     @Test
-    public void defaultConfigurationWhenNoConfigFilePresent() throws ExecutionException, InterruptedException {
+    public void fullPluginLifecycleWithDefaultConfiguration() throws ExecutionException, InterruptedException {
 
         // dummy consul client
         Consul consul = mock(Consul.class);
@@ -49,6 +53,7 @@ public class ConsulDiscoveryCallbackTest {
         verify(agentClient).register(argument.capture());
 
         Registration registration = argument.getValue();
+        assertEquals("cluster-discovery-hivemq", registration.getName());
         assertEquals("clusternode1-hostname", registration.getAddress().get());
         assertEquals(Integer.valueOf(1234), registration.getPort().get());
         assertEquals("clusternode1", registration.getId());
@@ -94,4 +99,5 @@ public class ConsulDiscoveryCallbackTest {
         callback.destroy();
         verify(agentClient).deregister(eq("clusternode1"));
     }
+
 }

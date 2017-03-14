@@ -1,10 +1,8 @@
 /**
- *
  * Licensed under the MIT License. See LICENSE file in the project root for full license information.
  */
 package io.pelle.hivemq.plugin;
 
-import com.google.common.net.HostAndPort;
 import com.hivemq.spi.exceptions.UnrecoverableException;
 import com.orbitz.consul.Consul;
 import com.orbitz.consul.ConsulException;
@@ -29,18 +27,20 @@ public class ConsulClientProvider implements Provider<Consul> {
     @Override
     public Consul get() {
 
-        String consulHostname = configuration.getConsulHostname();
-        int consulPort = configuration.getConsulPort();
-        log.info("connecting to consul {}:{}", consulHostname, consulPort);
+        String consulUrl = configuration.getConsulUrl();
 
         try {
-            Consul.Builder builder = Consul.builder().withHostAndPort(HostAndPort.fromParts(consulHostname, consulPort));
+            Consul.Builder builder = Consul.builder().withUrl(consulUrl);
 
             if (System.getenv(Constants.CONSUL_TOKEN_ENVIRONMENT) != null) {
                 builder.withAclToken(Constants.CONSUL_TOKEN_ENVIRONMENT);
+                log.info("connecting to consul with url '{}' using http token", consulUrl);
+            } else {
+                log.info("connecting to consul with url '{}'", consulUrl);
             }
 
             return builder.build();
+
         } catch (ConsulException e) {
             log.error("unable to connect to consul", e);
             throw new UnrecoverableException();

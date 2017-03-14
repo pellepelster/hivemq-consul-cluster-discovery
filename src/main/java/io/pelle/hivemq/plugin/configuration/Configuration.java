@@ -11,8 +11,6 @@ import org.slf4j.LoggerFactory;
 
 import java.util.Properties;
 
-import static java.lang.Math.toIntExact;
-
 public class Configuration {
 
     private static final Logger log = LoggerFactory.getLogger(Configuration.class);
@@ -24,12 +22,12 @@ public class Configuration {
         properties = configurationReader.getProperties();
     }
 
-    public String getConsulHostname() {
-        return properties.getProperty(Constants.CONSUL_HOSTNAME_KEY, Constants.CONSUL_HOSTNAME_DEFAULT);
+    public String getConsulUrl() {
+        return properties.getProperty(Constants.CONSUL_URL_KEY, Constants.CONSUL_URL_DEFAULT);
     }
 
-    public int getConsulPort() {
-        return toIntExact(getLong(Constants.CONSUL_PORT_KEY, Constants.CONSUL_PORT_DEFAULT));
+    public String getConsulServiceName() {
+        return properties.getProperty(Constants.CONSUL_SERVICE_NAME_KEY, Constants.CONSUL_SERVICE_NAME_DEFAULT);
     }
 
     public long getConsulCheckTTL() {

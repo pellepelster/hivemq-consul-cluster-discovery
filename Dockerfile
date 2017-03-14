@@ -16,7 +16,7 @@ RUN chmod +x /opt/hivemq/bin/run.sh
 
 COPY config.xml /opt/hivemq/conf/config.xml
 COPY logback.xml /opt/hivemq/conf/logback.xml
-COPY hivemq-consul-cluster-discovery-0.0.1-SNAPSHOT-all.jar /opt/hivemq/plugins
+COPY hivemq-consul-cluster-discovery-SNAPSHOT-all.jar /opt/hivemq/plugins
 EXPOSE 1883
 
 WORKDIR /opt/hivemq

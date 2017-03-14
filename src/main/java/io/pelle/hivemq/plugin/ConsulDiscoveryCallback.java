@@ -13,7 +13,6 @@ import com.orbitz.consul.NotRegisteredException;
 import com.orbitz.consul.model.agent.ImmutableRegistration;
 import com.orbitz.consul.model.agent.Registration;
 import com.orbitz.consul.model.health.ServiceHealth;
-import com.orbitz.consul.option.ImmutableCatalogOptions;
 import com.orbitz.consul.option.ImmutableQueryOptions;
 import io.pelle.hivemq.plugin.configuration.Configuration;
 import org.slf4j.Logger;
@@ -61,15 +60,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
                 .address(ownAddress.getHost())
                 .id(getServiceId())
                 .addChecks(ttlCheck).build();
-
-        ImmutableQueryOptions.Builder queryOptions = ImmutableQueryOptions.builder();
-
-        if (System.getenv(Constants.CONSUL_TOKEN_ENVIRONMENT) != null) {
-            queryOptions.token(System.getenv(Constants.CONSUL_TOKEN_ENVIRONMENT));
-            log.info("using token for service registration");
-        }
-
-        consul.agentClient().register(serviceRegistration, queryOptions.build());
+        consul.agentClient().register(serviceRegistration, getQueryOptions());
 
         pluginExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -88,15 +79,8 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
 
         final List<ClusterNodeAddress> addresses = new ArrayList<>();
 
-        ImmutableQueryOptions.Builder queryOptions = ImmutableQueryOptions.builder();
-
-        if (System.getenv(Constants.CONSUL_TOKEN_ENVIRONMENT) != null) {
-            queryOptions.token(System.getenv(Constants.CONSUL_TOKEN_ENVIRONMENT));
-            log.info("using token for healthy service retrieval");
-        }
-
         List<ServiceHealth> nodes = consul.healthClient()
-                .getHealthyServiceInstances(configuration.getConsulServiceName(), queryOptions.build())
+                .getHealthyServiceInstances(configuration.getConsulServiceName(), getQueryOptions())
                 .getResponse();
 
         for (ServiceHealth node : nodes) {
@@ -104,6 +88,18 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
         }
 
         return Futures.immediateFuture(addresses);
+    }
+
+    private ImmutableQueryOptions getQueryOptions() {
+
+        ImmutableQueryOptions.Builder queryOptions = ImmutableQueryOptions.builder();
+
+        if (System.getenv(Constants.CONSUL_TOKEN_ENVIRONMENT) != null) {
+            queryOptions.token(System.getenv(Constants.CONSUL_TOKEN_ENVIRONMENT));
+            log.debug("using token for query options");
+        }
+
+        return queryOptions.build();
     }
 
     @Override

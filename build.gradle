@@ -64,3 +64,12 @@ dockerRun {
     image 'hivemq-consul-cluster-discovery'
     daemonize false
 }
+
+task bundler(type: Exec) {
+    commandLine "bundle", "install", "--path=vendor/bundle"
+}
+
+task rspec(type: Exec) {
+    commandLine "bundle", "exec", "rspec", "spec/hivemq-consul-cluster-discovery"
+}
+rspec.dependsOn(bundler)

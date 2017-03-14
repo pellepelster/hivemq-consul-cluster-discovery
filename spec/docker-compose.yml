@@ -22,6 +22,7 @@ services:
     image: hivemq-consul-cluster-discovery
     environment:
       - CONSUL_HTTP_TOKEN=token
+      - CLUSTER_DISCOVERY_CONSUL_URL=http://consul:8500
     links:
       - consul-agent1:consul
     ports:
@@ -31,6 +32,7 @@ services:
     image: hivemq-consul-cluster-discovery
     environment:
       - CONSUL_HTTP_TOKEN=token
+      - CLUSTER_DISCOVERY_CONSUL_URL=http://consul:8500
     links:
       - consul-agent2:consul
     ports:

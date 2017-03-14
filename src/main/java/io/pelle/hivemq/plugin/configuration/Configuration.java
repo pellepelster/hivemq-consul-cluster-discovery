@@ -22,11 +22,11 @@ public class Configuration {
     }
 
     public String getConsulUrl() {
-        return properties.getProperty(Constants.CONSUL_URL_KEY, Constants.CONSUL_URL_DEFAULT);
+        return getPropertyWithOverride(Constants.CONSUL_URL_KEY, Constants.CONSUL_URL_DEFAULT);
     }
 
     public String getConsulServiceName() {
-        return properties.getProperty(Constants.CONSUL_SERVICE_NAME_KEY, Constants.CONSUL_SERVICE_NAME_DEFAULT);
+        return getPropertyWithOverride(Constants.CONSUL_SERVICE_NAME_KEY, Constants.CONSUL_SERVICE_NAME_DEFAULT);
     }
 
     public long getConsulCheckTTL() {
@@ -37,8 +37,21 @@ public class Configuration {
         return getLong(Constants.CONSUL_SERVICE_UPDATE_INTERVAL_KEY, Constants.CONSUL_SERVICE_UPDATE_INTERVAL_DEFAULT);
     }
 
+    private String getPropertyWithOverride(String key, String defaultValue) {
+        String envName = getEnvironmentVariableNameForKey(key);
+        if (System.getenv(envName) != null) {
+            return System.getenv(envName);
+        } else {
+            return this.properties.getProperty(key, defaultValue);
+        }
+    }
+
+    private String getEnvironmentVariableNameForKey(String key) {
+        return Constants.ENVIRONMENT_VARIABLE_PREFIX + key.toUpperCase().replaceAll("-", "_");
+    }
+
     private long getLong(String key, long defaultValue) {
-        final String value = properties.getProperty(key);
+        final String value = getEnvironmentVariableNameForKey(key);
 
         if (value == null) {
             return defaultValue;

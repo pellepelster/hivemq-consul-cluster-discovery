@@ -69,10 +69,17 @@ The Consul discovery plugin uses its own configuration file 'consuldiscovery.pro
 
 | config key | description | default |
 |------------|--------------|--------|
-| consul-hostname | consul hostname | consul |
-| consul-port | consul port | 8500 |
+| consul-url| consul url | chttps://consul:443|
 | consul-ttl | Time to live for the health check that gets attached to the services the plugin registers in Consul | 120 |
 | consul-update-interval | The interval at which the plugin updates the TTL check for the Consul service. This value should obviously be smaller than `consul-ttl`  | 60 |
+
+All configuration keys can be overriden by environment variables, where the name of the variable is computed in the following way:
+
+* configuration key converted to uppercase
+* `-` is replaced with `_`
+* the prefix `CLUSTER_DISCOVERY_` is added to avoid collisons
+
+For example `consul-url` becomes `CLUSTER_DISCOVERY_CONSUL_URL`.
 
 ### ACL token Configuration
 

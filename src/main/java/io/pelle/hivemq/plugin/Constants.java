@@ -8,9 +8,11 @@ public interface Constants {
 
     String CONFIG_FILENAME = "consuldiscovery.properties";
 
+    String ENVIRONMENT_VARIABLE_PREFIX = "CLUSTER_DISCOVERY_";
+
     String CONSUL_URL_KEY = "consul-url";
 
-    String CONSUL_URL_DEFAULT = "https://localhost:443";
+    String CONSUL_URL_DEFAULT = "https://consul:443";
 
     String CONSUL_SERVICE_NAME_KEY = "consul-service-name";
 

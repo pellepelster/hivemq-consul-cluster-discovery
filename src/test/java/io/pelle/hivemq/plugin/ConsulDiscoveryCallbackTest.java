@@ -10,11 +10,13 @@ import com.orbitz.consul.NotRegisteredException;
 import com.orbitz.consul.model.ConsulResponse;
 import com.orbitz.consul.model.agent.Registration;
 import com.orbitz.consul.model.health.*;
+import com.orbitz.consul.option.ImmutableQueryOptions;
 import io.pelle.hivemq.plugin.configuration.Configuration;
 import io.pelle.hivemq.plugin.configuration.ConfigurationReader;
 import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
+import org.mockito.ArgumentMatchers;
 
 import javax.net.ssl.SSLContext;
 import java.math.BigInteger;
@@ -88,7 +90,7 @@ public class ConsulDiscoveryCallbackTest {
 
         nodes.add(serviceHealth);
         ConsulResponse response = new ConsulResponse(nodes, 0, true, BigInteger.ZERO);
-        when(healthClient.getHealthyServiceInstances(any())).thenReturn(response);
+        when(healthClient.getHealthyServiceInstances(anyString(), ArgumentMatchers.<ImmutableQueryOptions>any())).thenReturn(response);
         when(consul.healthClient()).thenReturn(healthClient);
 
         List<ClusterNodeAddress> addresses = callback.getNodeAddresses().get();

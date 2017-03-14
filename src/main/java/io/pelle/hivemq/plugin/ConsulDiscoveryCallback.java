@@ -13,8 +13,8 @@ import com.orbitz.consul.NotRegisteredException;
 import com.orbitz.consul.model.agent.ImmutableRegistration;
 import com.orbitz.consul.model.agent.Registration;
 import com.orbitz.consul.model.health.ServiceHealth;
+import com.orbitz.consul.option.ImmutableCatalogOptions;
 import com.orbitz.consul.option.ImmutableQueryOptions;
-import com.orbitz.consul.option.QueryOptions;
 import io.pelle.hivemq.plugin.configuration.Configuration;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -69,7 +69,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
             log.info("using token for service registration");
         }
 
-        consul.agentClient().register(serviceRegistration,  queryOptions.build());
+        consul.agentClient().register(serviceRegistration, queryOptions.build());
 
         pluginExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override
@@ -88,8 +88,15 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
 
         final List<ClusterNodeAddress> addresses = new ArrayList<>();
 
+        ImmutableQueryOptions.Builder queryOptions = ImmutableQueryOptions.builder();
+
+        if (System.getenv(Constants.CONSUL_TOKEN_ENVIRONMENT) != null) {
+            queryOptions.token(System.getenv(Constants.CONSUL_TOKEN_ENVIRONMENT));
+            log.info("using token for healthy service retrieval");
+        }
+
         List<ServiceHealth> nodes = consul.healthClient()
-                .getHealthyServiceInstances(configuration.getConsulServiceName())
+                .getHealthyServiceInstances(configuration.getConsulServiceName(), queryOptions.build())
                 .getResponse();
 
         for (ServiceHealth node : nodes) {

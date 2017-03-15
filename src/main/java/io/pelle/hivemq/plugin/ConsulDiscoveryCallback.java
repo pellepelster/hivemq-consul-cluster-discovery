@@ -34,7 +34,6 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
     private final Consul consul;
 
     private String clusterId;
-    private ClusterNodeAddress ownAddress;
     private Optional<String> nodeAddress;
 
     @Inject
@@ -54,12 +53,11 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
     public void init(final String clusterId, final ClusterNodeAddress ownAddress) {
 
         this.clusterId = clusterId;
-        this.ownAddress = ownAddress;
 
         Registration.RegCheck ttlCheck = Registration.RegCheck.ttl(configuration.getConsulCheckTTL());
         Registration serviceRegistration = ImmutableRegistration.builder()
                 .name(configuration.getConsulServiceName())
-                .address(getNodeAddress())
+                .address(getNodeAddress(ownAddress))
                 .port(ownAddress.getPort())
                 .id(getServiceId())
                 .addChecks(ttlCheck).build();
@@ -93,6 +91,11 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
         return Futures.immediateFuture(addresses);
     }
 
+    @Override
+    public void destroy() {
+        consul.agentClient().deregister(getServiceId());
+    }
+
     private ImmutableQueryOptions getQueryOptions() {
 
         ImmutableQueryOptions.Builder queryOptions = ImmutableQueryOptions.builder();
@@ -105,12 +108,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
         return queryOptions.build();
     }
 
-    @Override
-    public void destroy() {
-        consul.agentClient().deregister(getServiceId());
-    }
-
-    public String getNodeAddress() {
+    private String getNodeAddress(ClusterNodeAddress ownAddress) {
         if (StringUtils.isNoneEmpty(configuration.getNodeAddress())) {
             return configuration.getNodeAddress();
         } else {

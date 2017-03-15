@@ -5,6 +5,7 @@ package io.pelle.hivemq.plugin.configuration;
 
 import com.google.inject.Inject;
 import io.pelle.hivemq.plugin.Constants;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -57,7 +58,7 @@ public class Configuration {
     private long getLong(String key, long defaultValue) {
         final String value = getEnvironmentVariableNameForKey(key);
 
-        if (value == null) {
+        if (StringUtils.isEmpty(value)) {
             return defaultValue;
         }
 

@@ -56,7 +56,7 @@ public class Configuration {
     }
 
     private long getLong(String key, long defaultValue) {
-        final String value = getEnvironmentVariableNameForKey(key);
+        final String value = getPropertyWithOverride(key, Long.toString(defaultValue));
 
         if (StringUtils.isEmpty(value)) {
             return defaultValue;

@@ -24,6 +24,7 @@ import javax.inject.Inject;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+import java.util.stream.Collectors;
 
 public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
 
@@ -52,6 +53,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
     @Override
     public void init(final String clusterId, final ClusterNodeAddress ownAddress) {
 
+        log.info(String.format("consul discovery plugin initialized, HiveMQ cluster node address is %s:%s", ownAddress.getHost(), ownAddress.getPort()));
         this.clusterId = clusterId;
 
         Registration.RegCheck ttlCheck = Registration.RegCheck.ttl(configuration.getConsulCheckTTL());
@@ -88,6 +90,10 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
             addresses.add(new ClusterNodeAddress(node.getService().getAddress(), node.getService().getPort()));
         }
 
+        log.info(String.format("consul returned %s cluster nodes (%s)",
+                addresses.size(),
+                addresses.stream().map(a -> a.getHost() + ":" + a.getPort())
+                        .collect(Collectors.joining(", "))));
         return Futures.immediateFuture(addresses);
     }
 

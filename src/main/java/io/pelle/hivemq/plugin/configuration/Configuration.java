@@ -42,6 +42,10 @@ public class Configuration {
         return getLong(Constants.CONSUL_SERVICE_UPDATE_INTERVAL_KEY, Constants.CONSUL_SERVICE_UPDATE_INTERVAL_DEFAULT);
     }
 
+    public long getConsulRegisterInterval() {
+        return getLong(Constants.CONSUL_SERVICE_REGISTER_INTERVAL_KEY, Constants.CONSUL_SERVICE_REGISTER_INTERVAL_DEFAULT);
+    }
+
     private String getPropertyWithOverride(String key, String defaultValue) {
         String envName = getEnvironmentVariableNameForKey(key);
         if (System.getenv(envName) != null) {

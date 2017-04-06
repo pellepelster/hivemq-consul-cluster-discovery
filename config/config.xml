@@ -14,7 +14,7 @@
 
         <discovery>
             <plugin>
-                <reload-interval>60</reload-interval>
+                <reload-interval>10</reload-interval>
             </plugin>
         </discovery>
 

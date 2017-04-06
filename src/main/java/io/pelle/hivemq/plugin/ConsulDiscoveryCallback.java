@@ -61,12 +61,23 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
             public void run() {
                 try {
                     tryRegisterConsulService(ownAddress);
-                    consul.agentClient().pass(getServiceId());
-                } catch (NotRegisteredException e) {
-                    log.error("error updating check", e);
+                } catch (Exception e) {
+                    log.error("error registering service", e);
                 }
             }
-        }, 0, configuration.getConsulUpdateInterval(), TimeUnit.SECONDS);
+        }, 0, configuration.getConsulRegisterInterval(), TimeUnit.SECONDS);
+
+        pluginExecutorService.scheduleAtFixedRate(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    consul.agentClient().pass(getServiceId());
+                } catch (NotRegisteredException e) {
+                    log.error("error updating ttl, service '{}' is not registered", getServiceId());
+                }
+            }
+        }, 10, configuration.getConsulUpdateInterval(), TimeUnit.SECONDS);
+
     }
 
     private void tryRegisterConsulService(ClusterNodeAddress ownAddress) {

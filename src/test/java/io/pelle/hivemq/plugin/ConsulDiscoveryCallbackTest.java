@@ -25,6 +25,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
@@ -42,7 +43,8 @@ public class ConsulDiscoveryCallbackTest {
 
         // empty config
         ConfigurationReader configurationReader = mock(ConfigurationReader.class);
-        when(configurationReader.getProperties()).thenReturn(new Properties());
+        Properties properties = new Properties();
+        when(configurationReader.getProperties()).thenReturn(properties);
         Configuration configuration = new Configuration(configurationReader);
 
         PluginExecutorService pluginExecutorService = mock(PluginExecutorService.class);
@@ -50,9 +52,20 @@ public class ConsulDiscoveryCallbackTest {
         ConsulDiscoveryCallback callback = new ConsulDiscoveryCallback(consul, configuration, pluginExecutorService);
         callback.init("clusternode1", new ClusterNodeAddress("clusternode1-hostname", 1234));
 
+        // check if registration job gets scheduled
+        ArgumentCaptor<Runnable> runnableArgument = ArgumentCaptor.forClass(Runnable.class);
+        verify(pluginExecutorService, times(2)).scheduleAtFixedRate(runnableArgument.capture(), anyLong(), eq(60l), eq(TimeUnit.SECONDS));
+
+        // run registration job
+        Runnable registrationRunnable = runnableArgument.getAllValues().get(0);
+        Runnable updateRunnable = runnableArgument.getAllValues().get(1);
+
+        registrationRunnable.run();
+
         // verify service registration
         ArgumentCaptor<Registration> argument = ArgumentCaptor.forClass(Registration.class);
         verify(agentClient).register(argument.capture(), any());
+
 
         Registration registration = argument.getValue();
         assertEquals("cluster-discovery-hivemq", registration.getName());
@@ -64,12 +77,8 @@ public class ConsulDiscoveryCallbackTest {
         Registration.RegCheck regCheck = registration.getChecks().get(0);
         assertEquals("120s", regCheck.getTtl().get());
 
-        // check if updater jobs gets scheduled
-        ArgumentCaptor<Runnable> runnableArgument = ArgumentCaptor.forClass(Runnable.class);
-        verify(pluginExecutorService).scheduleAtFixedRate(runnableArgument.capture(), eq(0l), eq(60l), eq(TimeUnit.SECONDS));
-
-        // run updater job and check consul service pass call
-        runnableArgument.getValue().run();
+         // run updater job and check consul service pass call
+        updateRunnable.run();
         try {
             verify(agentClient).pass(eq("cluster-discovery-hivemq"));
         } catch (NotRegisteredException e) {

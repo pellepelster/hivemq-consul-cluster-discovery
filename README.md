@@ -73,6 +73,7 @@ The Consul discovery plugin uses its own configuration file 'consuldiscovery.pro
 | consul-ttl | Time to live for the health check that gets attached to the services the plugin registers in Consul | 120 |
 | hivemq-node-address | HiveMQ node address to register as node worker  in consul. If no address is set, the address that is determined by HiveMQ will be used | <none>|
 | consul-update-interval | The interval at which the plugin updates the TTL check for the Consul service. This value should obviously be smaller than `consul-ttl`  | 60 |
+| consul-register-interval | The interval at which the checks and updates the consul service registration | 60 |
 
 All configuration keys can be overriden by environment variables, where the name of the variable is computed in the following way:
 

@@ -53,28 +53,40 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
     @Override
     public void init(final String clusterId, final ClusterNodeAddress ownAddress) {
 
-        log.info(String.format("consul discovery plugin initialized, HiveMQ cluster node address is %s:%s", ownAddress.getHost(), ownAddress.getPort()));
+        log.debug(String.format("consul discovery plugin initialized, HiveMQ cluster node address is %s:%s", ownAddress.getHost(), ownAddress.getPort()));
         this.clusterId = clusterId;
-
-        Registration.RegCheck ttlCheck = Registration.RegCheck.ttl(configuration.getConsulCheckTTL());
-        Registration serviceRegistration = ImmutableRegistration.builder()
-                .name(configuration.getConsulServiceName())
-                .address(getNodeAddress(ownAddress))
-                .port(ownAddress.getPort())
-                .id(getServiceId())
-                .addChecks(ttlCheck).build();
-        consul.agentClient().register(serviceRegistration, getQueryOptions());
 
         pluginExecutorService.scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
                 try {
+                    tryRegisterConsulService(ownAddress);
                     consul.agentClient().pass(getServiceId());
                 } catch (NotRegisteredException e) {
                     log.error("error updating check", e);
                 }
             }
         }, 0, configuration.getConsulUpdateInterval(), TimeUnit.SECONDS);
+    }
+
+    private void tryRegisterConsulService(ClusterNodeAddress ownAddress) {
+
+        if (!consul.agentClient().isRegistered(configuration.getConsulServiceName())) {
+            log.debug("service {} not registered, will try to do so", configuration.getConsulServiceName());
+
+            Registration.RegCheck ttlCheck = Registration.RegCheck.ttl(configuration.getConsulCheckTTL());
+            Registration serviceRegistration = ImmutableRegistration.builder()
+                    .name(getServiceId())
+                    .address(getNodeAddress(ownAddress))
+                    .port(ownAddress.getPort())
+                    .id(getServiceId())
+                    .addChecks(ttlCheck).build();
+            consul.agentClient().register(serviceRegistration, getQueryOptions());
+
+            log.info("registered service {}, registration status now is {}", configuration.getConsulServiceName(), consul.agentClient().isRegistered(configuration.getConsulServiceName()));
+        } else {
+            log.debug("service {} already registered", configuration.getConsulServiceName());
+        }
     }
 
     @Override
@@ -90,7 +102,7 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
             addresses.add(new ClusterNodeAddress(node.getService().getAddress(), node.getService().getPort()));
         }
 
-        log.info(String.format("consul returned %s cluster nodes (%s)",
+        log.debug(String.format("consul returned %s cluster nodes (%s)",
                 addresses.size(),
                 addresses.stream().map(a -> a.getHost() + ":" + a.getPort())
                         .collect(Collectors.joining(", "))));

@@ -18,7 +18,7 @@ describe 'hivemq consul discovery plugin', :extend_helpers do
     puts "hivemq_node2 = #{host2}:#{port2}"
 
     # booooooo
-    sleep 30
+    sleep 60
 
     client1 = MQTT::Client.connect(host: host1, port: port1)
     client2 = MQTT::Client.connect(host: host2, port: port2)

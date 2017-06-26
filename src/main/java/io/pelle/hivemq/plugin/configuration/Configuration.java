@@ -5,6 +5,7 @@ package io.pelle.hivemq.plugin.configuration;
 
 import com.google.inject.Inject;
 import io.pelle.hivemq.plugin.Constants;
+import org.apache.commons.lang3.RandomUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -16,6 +17,7 @@ public class Configuration {
     private static final Logger log = LoggerFactory.getLogger(Configuration.class);
 
     private final Properties properties;
+    private final String consulServiceId = Integer.toString(RandomUtils.nextInt(1000,Integer.MAX_VALUE));
 
     @Inject
     public Configuration(ConfigurationReader configurationReader) {
@@ -28,6 +30,10 @@ public class Configuration {
 
     public String getConsulServiceName() {
         return getPropertyWithOverride(Constants.CONSUL_SERVICE_NAME_KEY, Constants.CONSUL_SERVICE_NAME_DEFAULT);
+    }
+
+    public String getConsulServiceId() {
+        return consulServiceId;
     }
 
     public String getNodeAddress() {

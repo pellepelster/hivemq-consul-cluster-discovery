@@ -47,6 +47,10 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
     }
 
     private String getServiceId() {
+        return String.format("%s", configuration.getConsulServiceId());
+    }
+
+    private String getServiceName() {
         return String.format("%s", configuration.getConsulServiceName());
     }
 
@@ -82,19 +86,19 @@ public class ConsulDiscoveryCallback implements ClusterDiscoveryCallback {
 
     private void tryRegisterConsulService(ClusterNodeAddress ownAddress) {
 
-        if (!consul.agentClient().isRegistered(configuration.getConsulServiceName())) {
+        if (!consul.agentClient().isRegistered(configuration.getConsulServiceId())) {
             log.debug("service {} not registered, will try to do so", configuration.getConsulServiceName());
 
             Registration.RegCheck ttlCheck = Registration.RegCheck.ttl(configuration.getConsulCheckTTL());
             Registration serviceRegistration = ImmutableRegistration.builder()
-                    .name(getServiceId())
+                    .name(getServiceName())
                     .address(getNodeAddress(ownAddress))
                     .port(ownAddress.getPort())
                     .id(getServiceId())
                     .addChecks(ttlCheck).build();
             consul.agentClient().register(serviceRegistration, getQueryOptions());
 
-            log.info("registered service {}, registration status now is {}", configuration.getConsulServiceName(), consul.agentClient().isRegistered(configuration.getConsulServiceName()));
+            log.info("registered service {}, registration status now is {}", configuration.getConsulServiceName(), consul.agentClient().isRegistered(configuration.getConsulServiceId()));
         } else {
             log.debug("service {} already registered", configuration.getConsulServiceName());
         }

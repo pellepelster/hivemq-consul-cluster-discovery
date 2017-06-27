@@ -13,19 +13,16 @@ import com.orbitz.consul.model.health.*;
 import com.orbitz.consul.option.ImmutableQueryOptions;
 import io.pelle.hivemq.plugin.configuration.Configuration;
 import io.pelle.hivemq.plugin.configuration.ConfigurationReader;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.mockito.ArgumentCaptor;
 import org.mockito.ArgumentMatchers;
+import static org.assertj.core.api.Assertions.*;
 
-import javax.net.ssl.SSLContext;
 import java.math.BigInteger;
-import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Properties;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.RunnableFuture;
 import java.util.concurrent.TimeUnit;
 
 import static org.junit.Assert.assertEquals;
@@ -71,7 +68,10 @@ public class ConsulDiscoveryCallbackTest {
         assertEquals("cluster-discovery-hivemq", registration.getName());
         assertEquals("clusternode1-hostname", registration.getAddress().get());
         assertEquals(Integer.valueOf(1234), registration.getPort().get());
-        assertEquals("cluster-discovery-hivemq", registration.getId());
+        assertEquals("cluster-discovery-hivemq", registration.getName());
+
+        String registrationId = registration.getId();
+        assertThat(registrationId).containsOnlyDigits();
         assertEquals(1, registration.getChecks().size());
 
         Registration.RegCheck regCheck = registration.getChecks().get(0);
@@ -80,7 +80,7 @@ public class ConsulDiscoveryCallbackTest {
          // run updater job and check consul service pass call
         updateRunnable.run();
         try {
-            verify(agentClient).pass(eq("cluster-discovery-hivemq"));
+            verify(agentClient).pass(eq(registrationId));
         } catch (NotRegisteredException e) {
             throw new RuntimeException(e);
         }
@@ -108,7 +108,7 @@ public class ConsulDiscoveryCallbackTest {
         assertEquals(5678, addresses.get(0).getPort());
 
         callback.destroy();
-        verify(agentClient).deregister(eq("cluster-discovery-hivemq"));
+        verify(agentClient).deregister(eq(registrationId));
     }
 
 }

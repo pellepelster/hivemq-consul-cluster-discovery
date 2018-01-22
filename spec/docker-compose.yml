@@ -21,19 +21,22 @@ services:
   hivemq_node1:
     image: hivemq-consul-cluster-discovery
     environment:
-      - CONSUL_HTTP_TOKEN=token
+      - CONSUL_HTTP_TOKEN=secret-consul-token
       - CLUSTER_DISCOVERY_CONSUL_URL=http://consul:8500
     links:
       - consul-agent1:consul
     ports:
       - "1883"
+      - "9080"
+      - "7777:9080"
 
   hivemq_node2:
     image: hivemq-consul-cluster-discovery
     environment:
-      - CONSUL_HTTP_TOKEN=token
+      - CONSUL_HTTP_TOKEN=secret-consul-token
       - CLUSTER_DISCOVERY_CONSUL_URL=http://consul:8500
     links:
       - consul-agent2:consul
     ports:
       - "1883"
+      - "9080"

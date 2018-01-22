@@ -14,17 +14,20 @@ import javax.inject.Inject;
 public class ConsulDiscoveryPluginEntryPoint extends PluginEntryPoint {
 
     private final ConsulDiscoveryCallback discoveryCallback;
+    private final HealthCheckEndpoint healthcheckEndpoint;
 
-    Logger log = LoggerFactory.getLogger(ConsulDiscoveryPluginEntryPoint.class);
+    private final Logger log = LoggerFactory.getLogger(ConsulDiscoveryPluginEntryPoint.class);
+
 
     @Inject
-    public ConsulDiscoveryPluginEntryPoint(final ConsulDiscoveryCallback discoveryCallback) {
+    public ConsulDiscoveryPluginEntryPoint(final ConsulDiscoveryCallback discoveryCallback, final HealthCheckEndpoint healthcheckEndpoint) {
         this.discoveryCallback = discoveryCallback;
+        this.healthcheckEndpoint = healthcheckEndpoint;
     }
 
     @PostConstruct
     public void postConstruct() {
-        getCallbackRegistry().addCallback(discoveryCallback);
+        getCallbackRegistry().addCallback(discoveryCallback); getCallbackRegistry().addCallback(healthcheckEndpoint);
     }
 
 }

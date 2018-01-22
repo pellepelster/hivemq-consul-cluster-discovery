@@ -7,7 +7,7 @@ require 'diplomat'
 require 'compose_wrapper'
 require 'mqtt'
 
-CONSUL_MASTER_TOKEN="11111111-1111-1111-1111-111111111111".freeze
+CONSUL_MASTER_TOKEN="secret-consul-token".freeze
 
 module Helpers
 
@@ -95,7 +95,6 @@ module Helpers
     # Diplomat::Acl.create(ID: 'allow_hivemq_discovery', Type: 'client', Rules: 'service "hivemq-service-discovery" { policy = "write" }')
     # puts Diplomat::Acl.list
   end
-
 end
 
 RSpec.configure do |c|
